@@ -1,0 +1,40 @@
+#/bin/sh
+
+# Load resources
+ 
+xrdb -merge .Xresources
+ 
+# Set up an icon tray
+
+trayer --edge top --align right --SetDockType true --SetPartialStrut true \
+ --expand true --distance 0 --width 10 --height 12 --transparent true --tint 0x010101  &
+ 
+# Set the background color<
+ 
+xsetroot -solid black #midnightblue
+
+# Fire up apps
+ 
+xscreensaver -no-splash &
+
+# NetworkManager
+if [ -x /usr/bin/nm-applet ] ; then
+   nm-applet & # --sm-disable &
+fi
+
+# Power management, so closing the lid will suspend the laptop.
+if [ -x /usr/bin/xfce4-power-manager ] ; then
+   sleep 0.5
+   xfce4-power-manager &
+fi
+ 
+# Dropbox with systray icon
+if [ -x /usr/bin/dropbox ] ; then
+   sleep 0.5
+   dropbox start
+fi
+
+# disable touchpad click
+synclient TapButton1=0
+
+exec xmonad
